@@ -9,9 +9,11 @@ from keys import MUSIXMATCH_KEY, TEXT_ANALYTICS_KEY
 from models import Song
 
 import requests
+import webbrowser
 
-# Base API URL for Musixmatch API
+# Base API URLs 
 MUSIX_BASE = 'http://api.musixmatch.com/ws/1.1/'
+TEXT_ANALYTICS_BASE = 'https://westus.api.cognitive.microsoft.com/text/analytics/v2.0'
 
 # GetLyrics
 # Returns list of lyrics for analysis
@@ -65,7 +67,7 @@ def GetLyrics():
         # Package song
         song = Song(artist, track_name, lyrics)
         songs[code] = song
-        print('Got lyrics and info for {0}: {1} to database'
+        print('Got lyrics and info for {0}: {1}'
               .format(song.name, song.artist))
 
     return songs
@@ -74,16 +76,15 @@ def GetLyrics():
 # Returns emotion of songs entered
 
 
-def GetEmotion(songs):
+def GetPositiveSongs(songs):
     i = 1
-    song_sentiment = {}
+    pos_Songs = []
 
     for song in songs.itervalues():
         print('Gonna search sentiment for {0}'.format(song.name))
 
         # Prepare requests to Text Analytics API
-        url = 'https://westus.api.cognitive.microsoft.com/text/\
-        analytics/v2.0/sentiment'
+        url = '{0}/sentiment'.format(TEXT_ANALYTICS_BASE)
         headers = {'Ocp-Apim-Subscription-Key': TEXT_ANALYTICS_KEY}
         json = {'documents': [
                                 {"language": "en",
@@ -98,27 +99,26 @@ def GetEmotion(songs):
         sentiment_resp_json = sentiment_response.json()['documents']
         sentiment = sentiment_resp_json[0]['score']
 
-        # Package Track with Sentiment in database
-        track = '{0}: {1}'.format(song.artist, song.name)
-        song_sentiment[track] = sentiment
-        print('Got sentiment for {0}: {1}'.format(song.artist, song.name))
-
+        if sentiment > .5:
+            print('Adding {0}: {1} as a positive track, sentiment: {2}'
+                  .format(song.artist, song.name, sentiment))
+            pos_Songs.append(song)
+        
         i += 1
-
-    return song_sentiment
+    return pos_Songs
 
 
 def main():
     songs = GetLyrics()
-    song_sentiment = GetEmotion(songs)
+    pos_Songs = GetPositiveSongs(songs)
 
-    for key, value in song_sentiment.iteritems():
-        if value > .5:
-            print('{0} has a HAPPY sentiment (score of {1})'
-                  .format(key, value))
+    good_Song = pos_Songs[0]
+    print('Gonna open {0} by {1}'.format(good_Song.name, good_Song.artist))
+    
+    song_URL = 'https://www.youtube.com/results?search_query={0} {1}'\
+               .format(good_Song.artist, good_Song.name)
 
-        else:
-            print('{0} has a SAD sentiment (score of {1})'.format(key, value))
+    webbrowser.open_new_tab(song_URL)
 
 
 if __name__ == '__main__':
