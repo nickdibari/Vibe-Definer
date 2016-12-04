@@ -10,7 +10,7 @@ from models import Song
 
 import requests
 import webbrowser
-import json
+import random
 
 # Base API URLs 
 MUSIX_BASE = 'http://api.musixmatch.com/ws/1.1'
@@ -60,7 +60,6 @@ def GetLyrics(artist):
         song = Song(code, artist, name, lyrics)
         songs.append(song)
         
-        
     return songs
 
 
@@ -103,8 +102,8 @@ def main():
     songs = GetLyrics(artist)
     
     pos_Songs = GetPositiveSongs(songs)
-    
-    good_Song = pos_Songs[0]
+    good_Song = random.choice(pos_Songs)
+
     print('Gonna open {0} by {1}'.format(good_Song.name, good_Song.artist))
 
     song_URL = 'https://www.youtube.com/results?search_query={0} {1}'\
