@@ -56,6 +56,7 @@ def GetLyrics(artist):
             print('Something went wrong for song {0}'.format(name))
 
         if lyrics_json['body']:
+            print('Found lyrics for {0}'.format(name))
             lyrics = lyrics_json['body']['lyrics']['lyrics_body']
 
         else:
