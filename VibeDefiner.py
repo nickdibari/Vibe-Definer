@@ -62,7 +62,7 @@ def GetLyrics(artist):
             print('No body for song {0}'.format(name))
         if not lyrics:
             print('No lyrics found for {0}'.format(name))
-            lyrics = 'a' # Can't pass None Type to Text Analytics API
+            lyrics = 'bad' # Can't pass None Type to Text Analytics API
 
         # Package song for analysis
         song = Song(code, artist, name, lyrics)
