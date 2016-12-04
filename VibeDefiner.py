@@ -14,6 +14,7 @@ import random
 
 # Base API URLs 
 MUSIX_BASE = 'http://api.musixmatch.com/ws/1.1'
+
 TEXT_ANALYTICS_BASE = 'https://westus.api.cognitive.microsoft.com/text/analytics/v2.0'
 
 # GetLyrics
@@ -54,7 +55,8 @@ def GetLyrics(artist):
         lyrics = lyrics_resp_json['body']['lyrics']['lyrics_body']
 
         if not lyrics:
-            lyrics = 'bad' # HACK HACK HACK HACK
+            print('No lyrics found for {0}'.format(name))
+            lyrics = 'a' # Can't pass None Type to Text Analytics API
 
         # Package song for analysis
         song = Song(code, artist, name, lyrics)
