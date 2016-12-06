@@ -101,7 +101,7 @@ def GetPositiveSongs(songs):
         sentiment = sentiment_json[0]['score']
 
         if sentiment > .5:
-            print('Adding {0}: {1} as a positive track, sentiment: {2}'
+            print('Adding {0}: {1} as a positive track, sentiment: {2:.2f}'
                   .format(song.artist, song.name, sentiment))
             pos_Songs.append(song)
         
