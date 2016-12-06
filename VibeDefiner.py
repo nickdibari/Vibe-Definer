@@ -50,13 +50,12 @@ def GetLyrics(artist):
         lyrics_json = lyrics_response.json()['message']
 
         if lyrics_json['header']['status_code'] == 200:
-            print('Got JSON of track.lyrics.get from {0} OK'.format(name))
+            print('Got JSON of track.lyrics.get from {0}'.format(name))
 
         else:
             print('Something went wrong for song {0}'.format(name))
 
         if lyrics_json['body']:
-            print('Found lyrics for {0}'.format(name))
             lyrics = lyrics_json['body']['lyrics']['lyrics_body']
 
         else:
@@ -66,10 +65,13 @@ def GetLyrics(artist):
             print('No lyrics found for {0}'.format(name))
             lyrics = 'bad' # Can't pass None Type to Text Analytics API
 
+        else:
+            print('Found lyrics for {0} OK'.format(name))
+
         # Package song for analysis
         song = Song(code, artist, name, lyrics)
         songs.append(song)
-        
+
     return songs
 
 
