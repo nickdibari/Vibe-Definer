@@ -91,13 +91,7 @@ def GetPositiveSongs(songs):
         # Prepare requests to Text Analytics API
         url = '{0}/sentiment'.format(TEXT_ANALYTICS_BASE)
         headers = {'Ocp-Apim-Subscription-Key': TEXT_ANALYTICS_KEY}
-        j = {'documents': [
-                         {"language": "en",
-                          "id": str(i),
-                          "text": song.lyrics
-                         }
-                          ]
-            }
+        j = {'documents': [{"language": "en", "id": str(i), "text": song.lyrics}]}
 
         # Hit Text Analytics API
         sentiment_response = requests.post(url, data=None, headers=headers, json=j, params=None)
