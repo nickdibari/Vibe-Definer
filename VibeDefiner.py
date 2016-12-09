@@ -5,12 +5,16 @@
 # Nicholas DiBari
 # Python script to generate mood of song from lyrics
 
-from keys import MUSIXMATCH_KEY, TEXT_ANALYTICS_KEY
+from keys import MUSIXMATCH_KEY, TEXT_ANALYTICS_KEY, SPOTIFY_ID, SPOTIFY_KEY
 from models import Song
+
+import spotipy
 
 import requests
 import webbrowser
 import random
+
+from pprint import pprint
 
 # Base API URLs
 MUSIX_BASE = 'http://api.musixmatch.com/ws/1.1'
@@ -108,8 +112,33 @@ def GetPositiveSongs(songs):
         i += 1
     return pos_Songs
 
+# SongAnalysis
+# Analyze music of positive songs and return positive music songs
+
+
+def SongAnalysis():
+    print('In SongAnalysis')
+    #creds = spotipy.oauth2.SpotifyClientCredentials(SPOTIFY_ID, SPOTIFY_KEY)
+
+    #if creds:
+        #print('Created creds object OK')
+
+    conx = spotipy.Spotify()
+
+    if conx:
+        print('Connected to Spotify API OK')
+
+    song = Song('Jack Johnson', 'To The Sea', 'lyrics')
+
+    # Search for track ID from Spotify
+    results = conx.search('track: {0}'.format(song.name), type='track')
+
+    pprint(results['tracks']['items'][1c])
+
 
 def main():
+    SongAnalysis()
+    '''
     artist = raw_input('Please enter an artist to search for: ')
     songs = GetLyrics(artist)
 
@@ -122,7 +151,7 @@ def main():
                .format(good_Song.artist, good_Song.name)
 
     webbrowser.open_new_tab(song_URL)
-
+    '''
 
 if __name__ == '__main__':
     main()
