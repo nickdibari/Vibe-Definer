@@ -59,15 +59,15 @@ def GetLyrics(artist):
         if lyrics_json['body']:
             lyrics = lyrics_json['body']['lyrics']['lyrics_body']
 
+            if not lyrics:
+                print('No lyrics found for {0}'.format(name))
+                lyrics = 'bad' # Can't pass None Type to Text Analytics API
+
+            else:
+                print('Found lyrics for {0} OK'.format(name))
+
         else:
             print('No body for song {0}'.format(name))
-
-        if not lyrics:
-            print('No lyrics found for {0}'.format(name))
-            lyrics = 'bad' # Can't pass None Type to Text Analytics API
-
-        else:
-            print('Found lyrics for {0} OK'.format(name))
 
         # Package song for analysis
         song = Song(artist, name, lyrics)
