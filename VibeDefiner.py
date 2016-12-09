@@ -70,7 +70,7 @@ def GetLyrics(artist):
             print('Found lyrics for {0} OK'.format(name))
 
         # Package song for analysis
-        song = Song(code, artist, name, lyrics)
+        song = Song(artist, name, lyrics)
         songs.append(song)
 
     return songs
