@@ -119,12 +119,10 @@ def GetPositiveSongs(songs):
 
 def SongAnalysis(songs):
     results = []
+    song_id = None
 
     # Authentication for Spotify API
     creds = oauth2.SpotifyClientCredentials(client_id=SPOTIFY_ID, client_secret=SPOTIFY_KEY)
-
-    if creds:
-        print('Created creds object OK')
 
     conx = spotipy.Spotify(client_credentials_manager=creds)
 
@@ -152,29 +150,33 @@ def SongAnalysis(songs):
                 song_id = resp['id']
                 break
 
-            else:
-                print('{0} does not match {1}'.format(resp['artists'][0]['name'], song.artist))
-
-        song_IDs = [song_id]
-
-        # Search for audio features of given track
-        features_results = conx.audio_features(tracks=song_IDs)
-
-        if features_results:
-            print('Got JSON of audio_features OK')
+        if song_id == None:
+            print('Did not find match for song {0} by {1}'.format(song.name, song.artist))
 
         else:
-            print('DID NOT get JSON of audio_features')
+            song_IDs = [song_id]
 
-        features_JSON = features_results[0]
+            # Search for audio features of given track
+            features_results = conx.audio_features(tracks=song_IDs)
 
-        valence = features_JSON['valence']
-        #energy = features_JSON['energy']
-        #danceability = features_JSON['danceability']
+            if features_results:
+                print('Got JSON of audio_features OK')
 
-        if valence > .5:
-            print('Adding {0} to results'.format(song.name))
-            results.append(song)
+            else:
+                print('DID NOT get JSON of audio_features')
+
+            features_JSON = features_results[0]
+
+            valence = features_JSON['valence']
+            #energy = features_JSON['energy']
+            #danceability = features_JSON['danceability']
+
+            if valence > .5:
+                print('Adding {0} to results, valence: {1}'.format(song.name, valence))
+                results.append(song)
+
+            else:
+                print('Not adding {0} to results, valence: {1}'.format(song.name, valence))
 
     return results
 
