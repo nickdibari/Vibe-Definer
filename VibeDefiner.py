@@ -175,9 +175,6 @@ def SongAnalysis(songs):
                 print('Adding {0} to results, valence: {1}'.format(song.name, valence))
                 results.append(song)
 
-            else:
-                print('Not adding {0} to results, valence: {1}'.format(song.name, valence))
-
     return results
 
 
