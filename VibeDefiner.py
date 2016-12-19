@@ -132,7 +132,7 @@ def SongAnalysis(songs):
     for song in songs:
         print('Gonna run {0} through Spotify API'.format(song.name))
         # Search for track ID for given song name
-        search_results = conx.search(q=song.name, limit=30, type='track')
+        search_results = conx.search(q=song.name, type='track')
 
         if search_results:
             print('Got JSON of search OK')
@@ -166,8 +166,6 @@ def SongAnalysis(songs):
             features_JSON = features_results[0]
 
             valence = features_JSON['valence']
-            #energy = features_JSON['energy']
-            #danceability = features_JSON['danceability']
 
             if valence > .5:
                 print('Adding {0} to results, valence: {1}'.format(song.name, valence))
