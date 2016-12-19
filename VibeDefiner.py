@@ -15,8 +15,6 @@ import requests
 import webbrowser
 import random
 
-from pprint import pprint
-
 # Base API URLs
 MUSIX_BASE = 'http://api.musixmatch.com/ws/1.1'
 
