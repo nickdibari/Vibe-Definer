@@ -29,7 +29,7 @@ def GetLyrics(artist):
     songs = []
 
     # Get tracks from artist
-    tracks_URL = '{0}/track.search?apikey={1}&q_artist={2}&page_size=10&f_has_lyrics=1'\
+    tracks_URL = '{0}/track.search?apikey={1}&q_artist={2}&page_size=20&f_has_lyrics=1'\
                  .format(MUSIX_BASE, MUSIXMATCH_KEY, artist)
 
     tracks_response = requests.get(tracks_URL)
