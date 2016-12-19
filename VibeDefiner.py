@@ -87,7 +87,6 @@ def GetPositiveSongs(songs):
     i = 1
     pos_Songs = []
 
-    print('Length of songs: {0}'.format(len(songs)))
     for song in songs:
         print('Gonna search sentiment for {0}'.format(song.name))
 
@@ -117,7 +116,6 @@ def GetPositiveSongs(songs):
 
 def SongAnalysis(songs):
     results = []
-    song_id = None
 
     # Authentication for Spotify API
     creds = oauth2.SpotifyClientCredentials(client_id=SPOTIFY_ID, client_secret=SPOTIFY_KEY)
@@ -127,10 +125,11 @@ def SongAnalysis(songs):
     if conx:
         print('Connected to Spotify API OK')
 
-    print('Gonna run {0} songs through Spotify API'.format(len(songs)))
-
     for song in songs:
-        print('Gonna run {0} through Spotify API'.format(song.name))
+        song_id = None
+
+        print('Gonna search valence for: {0}'.format(len(songs)))
+
         # Search for track ID for given song name
         search_results = conx.search(q=song.name, type='track')
 
