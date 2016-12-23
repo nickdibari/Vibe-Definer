@@ -84,31 +84,32 @@ def GetLyrics(artist):
 
 
 def GetPositiveSongs(songs):
-    i = 1
+    i = 0
     pos_Songs = []
+    url = '{0}/sentiment'.format(TEXT_ANALYTICS_BASE)
+    headers = {'Ocp-Apim-Subscription-Key': TEXT_ANALYTICS_KEY}
+    j = {'documents': []}
 
+    # Package song names/lyrics into JSON Body
     for song in songs:
-        print('Gonna search sentiment for {0}'.format(song.name))
+        j['documents'].append({'language': 'en', 'id': song.name, 'text': song.lyrics})
 
-        # Prepare requests to Text Analytics API
-        url = '{0}/sentiment'.format(TEXT_ANALYTICS_BASE)
-        headers = {'Ocp-Apim-Subscription-Key': TEXT_ANALYTICS_KEY}
-        j = {'documents': [{"language": "en", "id": str(i), "text": song.lyrics}]}
+    # Send JSON Body through API
+    sentiment_response = requests.post(url, data=None, headers=headers, json=j, params=None)    
+    sentiment_response.raise_for_status()
 
-        # Hit Text Analytics API
-        sentiment_response = requests.post(url, data=None, headers=headers, json=j, params=None)
-        sentiment_response.raise_for_status()
+    sentiment_json = sentiment_response.json()['documents']
 
-        sentiment_json = sentiment_response.json()['documents']
-        sentiment = sentiment_json[0]['score']
-
-        if sentiment > .5:
-            print('Adding {0}: {1} as a positive track, sentiment: {2:.2f}'
-                  .format(song.artist, song.name, sentiment))
-            pos_Songs.append(song)
+    # Decode API Response and determine if song should be saved
+    for resp in sentiment_json:
+        if resp['score'] > .5:
+            print('Appending {0} to positive songs'.format(resp['id']))
+            pos_Songs.append(songs[i])
 
         i += 1
+
     return pos_Songs
+
 
 # SongAnalysis
 # Analyze music of positive songs and return positive music songs
