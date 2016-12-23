@@ -84,38 +84,32 @@ def GetLyrics(artist):
 
 
 def GetPositiveSongs(songs):
-    i = 1
+    i = 0
     pos_Songs = []
     url = '{0}/sentiment'.format(TEXT_ANALYTICS_BASE)
     headers = {'Ocp-Apim-Subscription-Key': TEXT_ANALYTICS_KEY}
+    j = {'documents': []}
 
     # Package song names/lyrics into JSON Body
+    for song in songs:
+        j['documents'].append({'language': 'en', 'id': song.name, 'text': song.lyrics})
 
     # Send JSON Body through API
+    sentiment_response = requests.post(url, data=None, headers=headers, json=j, params=None)    
+    sentiment_response.raise_for_status()
+
+    sentiment_json = sentiment_response.json()['documents']
 
     # Decode API Response and determine if song should be saved
-
-    for song in songs:
-        print('Gonna search sentiment for {0}'.format(song.name))
-
-        # Prepare requests to Text Analytics API
-
-        j = {'documents': [{"language": "en", "id": str(i), "text": song.lyrics}]}
-
-        # Hit Text Analytics API
-        sentiment_response = requests.post(url, data=None, headers=headers, json=j, params=None)
-        sentiment_response.raise_for_status()
-
-        sentiment_json = sentiment_response.json()['documents']
-        sentiment = sentiment_json[0]['score']
-
-        if sentiment > .5:
-            print('Adding {0}: {1} as a positive track, sentiment: {2:.2f}'
-                  .format(song.artist, song.name, sentiment))
-            pos_Songs.append(song)
+    for resp in sentiment_json:
+        if resp['score'] > .5:
+            print('Appending {0} to positive songs'.format(resp['id']))
+            pos_Songs.append(songs[i])
 
         i += 1
+
     return pos_Songs
+
 
 # SongAnalysis
 # Analyze music of positive songs and return positive music songs
@@ -135,7 +129,7 @@ def SongAnalysis(songs):
     for song in songs:
         song_id = None
 
-        print('Gonna search valence for: {0}'.format(len(songs)))
+        print('Gonna search valence for: {0}'.format(song.name))
 
         # Search for track ID for given song name
         search_results = conx.search(q=song.name, type='track')
