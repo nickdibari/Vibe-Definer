@@ -86,13 +86,20 @@ def GetLyrics(artist):
 def GetPositiveSongs(songs):
     i = 1
     pos_Songs = []
+    url = '{0}/sentiment'.format(TEXT_ANALYTICS_BASE)
+    headers = {'Ocp-Apim-Subscription-Key': TEXT_ANALYTICS_KEY}
+
+    # Package song names/lyrics into JSON Body
+
+    # Send JSON Body through API
+
+    # Decode API Response and determine if song should be saved
 
     for song in songs:
         print('Gonna search sentiment for {0}'.format(song.name))
 
         # Prepare requests to Text Analytics API
-        url = '{0}/sentiment'.format(TEXT_ANALYTICS_BASE)
-        headers = {'Ocp-Apim-Subscription-Key': TEXT_ANALYTICS_KEY}
+
         j = {'documents': [{"language": "en", "id": str(i), "text": song.lyrics}]}
 
         # Hit Text Analytics API
