@@ -128,7 +128,7 @@ def SongAnalysis(songs):
     for song in songs:
         song_id = None
 
-        print('Gonna search valence for: {0}'.format(len(songs)))
+        print('Gonna search valence for: {0}'.format(song.name)
 
         # Search for track ID for given song name
         search_results = conx.search(q=song.name, type='track')
