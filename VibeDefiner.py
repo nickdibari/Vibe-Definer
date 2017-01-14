@@ -64,7 +64,7 @@ def GetLyrics(artist):
 
             if not lyrics:
                 print('No lyrics found for {0}'.format(name))
-                lyrics = 'bad' # Can't pass None Type to Text Analytics API
+                lyrics = 'bad'  # Can't pass None Type to Text Analytics API
 
             else:
                 print('Found lyrics for {0} OK'.format(name))
@@ -95,7 +95,7 @@ def GetPositiveSongs(songs):
         j['documents'].append({'language': 'en', 'id': song.name, 'text': song.lyrics})
 
     # Send JSON Body through API
-    sentiment_response = requests.post(url, data=None, headers=headers, json=j, params=None)    
+    sentiment_response = requests.post(url, data=None, headers=headers, json=j, params=None)
     sentiment_response.raise_for_status()
 
     sentiment_json = sentiment_response.json()['documents']
@@ -148,7 +148,7 @@ def SongAnalysis(songs):
                 song_id = resp['id']
                 break
 
-        if song_id == None:
+        if song_id is None:
             print('Did not find match for song {0} by {1}'.format(song.name, song.artist))
 
         else:
@@ -192,6 +192,7 @@ def main():
                .format(good_Song.artist, good_Song.name)
 
     webbrowser.open_new_tab(song_URL)
+
 
 if __name__ == '__main__':
     main()
