@@ -42,9 +42,9 @@ def GetLyrics(artist):
 
     tracks = tracks_json['body']['track_list']
 
-    for i in range(len(tracks)):
-        name = tracks[i]['track']['track_name'].encode('ascii', 'ignore')
-        code = tracks[i]['track']['track_id']
+    for track in tracks:
+        name = track['track']['track_name'].encode('ascii', 'ignore')
+        code = track['track']['track_id']
 
         # Get Lyrics for song
         lyrics_url = '{0}/track.lyrics.get?apikey={1}&track_id={2}'\
