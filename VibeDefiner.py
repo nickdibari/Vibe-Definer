@@ -84,7 +84,6 @@ def GetLyrics(artist):
 
 
 def GetPositiveSongs(songs):
-    i = 0
     pos_Songs = []
     url = '{0}/sentiment'.format(TEXT_ANALYTICS_BASE)
     headers = {'Ocp-Apim-Subscription-Key': TEXT_ANALYTICS_KEY}
@@ -105,8 +104,6 @@ def GetPositiveSongs(songs):
         if resp['score'] > .5:
             print('Appending {0} to positive songs'.format(resp['id']))
             pos_Songs.append(songs[i])
-
-        i += 1
 
     return pos_Songs
 
