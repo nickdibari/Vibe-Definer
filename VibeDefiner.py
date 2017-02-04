@@ -22,7 +22,9 @@ TEXT_ANALYTICS_BASE = 'https://westus.api.cognitive.microsoft.com/\
 text/analytics/v2.0'
 
 # GetLyrics
-# Returns list of lyrics for analysis from given artist
+# INPUT: Artist to search for
+# OUTPUT: List of Song objects with lyrics relevant to the song
+# MusixMatch API
 
 
 def GetLyrics(artist):
@@ -79,11 +81,12 @@ def GetLyrics(artist):
     return songs
 
 
-# Get Emotion
-# Returns emotion of songs entered
+# Lryics Search
+# INPUT: List of Songs with lyrics
+# OUTPUT: List of Songs with lyrics containing a sentiment >.5
+# Microsoft Text Analyrics API
 
-
-def GetPositiveSongs(songs):
+def LyricsSearch(songs):
     i = 0
     pos_Songs = []
     url = '{0}/sentiment'.format(TEXT_ANALYTICS_BASE)
@@ -111,11 +114,13 @@ def GetPositiveSongs(songs):
     return pos_Songs
 
 
-# SongAnalysis
-# Analyze music of positive songs and return positive music songs
+# MusicSearch
+# INPUT: List of Songs
+# OUTPUT: List of Songs with a valence > .5
+# Spotify API
 
 
-def SongAnalysis(songs):
+def MusicSearch(songs):
     results = []
 
     # Authentication for Spotify API
@@ -178,11 +183,11 @@ def main():
     artist = raw_input('Please enter an artist to search for: ')
     songs = GetLyrics(artist)
 
-    pos_Songs = GetPositiveSongs(songs)
-    print('Got {0} songs backs from GetPositiveSongs'.format(len(pos_Songs)))
+    pos_Songs = LyricsSearch(songs)
+    print('Got {0} songs backs from LyricsSearch'.format(len(pos_Songs)))
 
-    good_Songs = SongAnalysis(pos_Songs)
-    print('Got {0} songs backs from SongAnalysis'.format(len(good_Songs)))
+    good_Songs = MusicSearch(pos_Songs)
+    print('Got {0} songs backs from MusicSearch'.format(len(good_Songs)))
 
     good_Song = random.choice(good_Songs)
 
